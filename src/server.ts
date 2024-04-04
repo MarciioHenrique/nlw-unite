@@ -1,4 +1,5 @@
 import fastify from "fastify";
+import fastifyCors from "@fastify/cors";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
 import { serializerCompiler, validatorCompiler, jsonSchemaTransform } from "fastify-type-provider-zod";
@@ -11,6 +12,10 @@ import { getEventAttendees } from "./routes/get-event-attendees";
 import { errorHandler } from "./error-handles";
 
 const app = fastify()
+
+app.register(fastifyCors, {
+    origin: "*"
+})
 
 app.register(fastifySwagger, {
     swagger: {
@@ -41,6 +46,6 @@ app.register(getEventAttendees)
 
 app.setErrorHandler(errorHandler)
 
-app.listen({port: 3333}).then(() => {
+app.listen({port: 3333, host: "0.0.0.0"}).then(() => {
     console.log("HTTP server running")
 })
